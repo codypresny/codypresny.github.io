@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<div id="nav"></div>
-
-<script>
-    fetch("/nav.html")
-        .then(res => res.text())
-        .then(html => document.getElementByID("nav").innerHTML = html);
-</script>    
-
-
 <head>
   <meta charset="UTF-8" />
   <title>GRUBSTAKE: the Website!</title>
 </head>
 <body>
+    <div id="nav"></div>
+
+    <script>
+        fetch("/nav.html")
+            .then(res => res.text())
+            .then(html => document.getElementByID("nav").innerHTML = html);
+    </script>    
   <h1>GRUBSTAKE: the Website!</h1>
   <p>Welcome to Grubstakegame.com</p>
 </body>
