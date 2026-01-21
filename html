@@ -2,11 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Website</title>
-  <link rel="stylesheet" href="style.css>
+  <title>Gold Placement Generator</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      text-align: center;
+      padding: 2rem;
+    }
+    button {
+      font-size: 1.1rem;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+    }
+  </style>
 </head>
 <body>
-  <h1>Grubstake Official Website</h1>
-  <p>"Got that dog in me!</p>
+
+  <h1>Gold Placement Generator</h1>
+  <button onclick="generateGold()">Generate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    const validConfigurations = [
+      [1,2], [1,4],
+      [2,1], [2,3], [2,4], [2,5],
+      [3,2], [3,5], [3,6],
+      [4,1], [4,2], [4,5], [4,7],
+      [5,2], [5,3], [5,4], [5,6], [5,7], [5,8],
+      [6,3], [6,5], [6,8], [6,9],
+      [7,4], [7,5], [7,8],
+      [8,5], [8,6], [8,7], [8,9],
+      [9,6], [9,8]
+    ];
+
+    function generateGold() {
+      // Build Major → Minor lookup
+      const minorByMajor = {};
+      validConfigurations.forEach(([M, m]) => {
+        if (!minorByMajor[M]) minorByMajor[M] = [];
+        minorByMajor[M].push(m);
+      });
+
+      // Uniform Major selection
+      const majors = Object.keys(minorByMajor);
+      const major = majors[Math.floor(Math.random() * majors.length)];
+
+      // Valid Minor selection
+      const minors = minorByMajor[major];
+      const minor = minors[Math.floor(Math.random() * minors.length)];
+
+      // No-gold positions
+      const noGold = [];
+      for (let i = 1; i <= 9; i++) {
+        if (i != major && i != minor) noGold.push(i);
+      }
+
+      document.getElementById("output").innerHTML = `
+        <strong>Major Gold (M):</strong> ${major}<br>
+        <strong>Minor Gold (m):</strong> ${minor}<br>
+        <strong>No Gold (X):</strong> ${noGold.join(", ")}
+      `;
+    }
+  </script>
+
 </body>
 </html>
