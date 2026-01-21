@@ -20,14 +20,7 @@
     }
   </style>
 </head>
-<body>
-    <div id="nav"></div>
-
-        <script>
-            fetch("/nav.html")
-                .then(res => res.text())
-                .then(html => document.getElementByID("nav").innerHTML = html);
-        </script>   
+<body>  
   <h1>Gold Placement Generator</h1>
   <button onclick="generateGold()">Generate</button>
 
