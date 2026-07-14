@@ -1,2 +1,263 @@
-<DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Gallery with Slideshow</title>
 
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+
+        /* SLIDESHOW */
+        .slideshow-container {
+            max-width: 900px;
+            margin: auto;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .next, .prev {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+            border-radius: 3px;
+            user-select: none;
+            transform: translateY(-50%);
+        }
+
+        .prev {
+            left: 10px;
+        }
+
+        .next {
+            right: 10px;
+        }
+
+        .next:hover, .prev:hover {
+            color: #ddd;
+        }
+
+        /* GALLERY */
+        .gallery-container {
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .gallery-item {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+
+        /* MODAL VIEWER */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 999;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 2.2rem;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body>
+
+<h1>Media Gallery</h1>
+
+<!-- SLIDESHOW -->
+<div class="slideshow-container">
+
+    <div class="slide">
+        https://picsum.photos/900/450?random=101
+    </div>
+
+    <div class="slide">
+        https://picsum.photos/900/450?random=102
+    </div>
+
+    <div class="slide">
+        https://picsum.photos/900/450?random=103
+    </div>
+
+    <div class="slide">
+        https://picsum.photos/900/450?random=104
+    </div>
+
+    <span class="prev">&#10094;</span>
+    <span class="next">&#10095;</span>
+
+</div>
+
+<!-- GALLERY -->
+<div class="gallery-container">
+    <div class="gallery-grid">
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=1
+        </div>
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=2
+        </div>
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=3
+        </div>
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=4
+        </div>
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=5
+        </div>
+
+        <div class="gallery-item">
+            https://picsum.photos/400/300?random=6
+        </div>
+
+    </div>
+</div>
+
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+    <span class="modal-close" id="modalClose">&times;</span>
+    <img id="modalImg">
+</div>
+
+
+<script>
+    /* SLIDESHOW LOGIC */
+    let slideIndex = 0;
+    const slides = document.querySelectorAll(".slide");
+    const nextBtn = document.querySelector(".next");
+    const prevBtn = document.querySelector(".prev");
+
+    function showSlide(n) {
+        slides.forEach(slide => slide.style.display = "none");
+        slides[n].style.display = "block";
+    }
+
+    function nextSlide() {
+        slideIndex = (slideIndex + 1) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    function prevSlide() {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    nextBtn.onclick = nextSlide;
+    prevBtn.onclick = prevSlide;
+
+    showSlide(slideIndex);
+
+    // Auto-advance every 5 seconds
+    setInterval(nextSlide, 5000);
+
+
+    /* MODAL VIEWER */
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalClose = document.getElementById('modalClose');
+
+    // Click any slideshow image
+    slides.forEach(slide => {
+        slide.addEventListener('click', () => {
+            let imgSrc = slide.querySelector("img").src;
+            modalImg.src = imgSrc;
+            modal.style.display = 'flex';
+        });
+    });
+
+    // Click any gallery thumbnail
+    document.querySelectorAll('.gallery-item img').forEach(img => {
+        img.addEventListener('click', () => {
+            modalImg.src = img.src;
+            modal.style.display = 'flex';
+        });
+    });
+
+    modalClose.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
