@@ -270,3 +270,7 @@
       document.getElementById("nogold-output").innerHTML = `<strong>X:</strong> ${noGold.join(", ")}`;
       document.getElementById("output").style.display = "block";
     }
+  </script>
+
+  </body>
+  </html>
