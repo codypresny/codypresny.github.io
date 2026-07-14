@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D6 Dice Roller</title>
-<style>
+    <title>Dice Roller</title>
+    <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
@@ -35,13 +35,15 @@
             color: #555;
             margin-right: 10px;
         }
-        input {
-            width: 60px;
+        select, input {
             padding: 8px;
             font-size: 1.1rem;
             text-align: center;
             border: 2px solid #ddd;
             border-radius: 6px;
+        }
+        input {
+            width: 60px;
         }
         button {
             background-color: #4CAF50;
@@ -85,13 +87,35 @@
             font-weight: bold;
             color: #333;
         }
+
+        /* Dice Roll Animation */
+        @keyframes rollAnimation {
+            0%   { transform: rotate(0deg) scale(1); }
+            25%  { transform: rotate(20deg) scale(1.1); }
+            50%  { transform: rotate(-20deg) scale(1.1); }
+            75%  { transform: rotate(10deg) scale(1.05); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .die.animate {
+            animation: rollAnimation 0.5s ease;
+        }
     </style>
 </head>
 <body>
 
 <div class="roller-container">
-    <h1>D6 Dice Roller</h1>
+    <h1>Dice Roller</h1>
     
+    <div class="input-group">
+        <label for="diceType">Type:</label>
+        <select id="diceType">
+            <option value="4">D4</option>
+            <option value="6" selected>D6</option>
+            <option value="8">D8</option>
+        </select>
+    </div>
+
     <div class="input-group">
         <label for="diceCount">Dice:</label>
         <input type="number" id="diceCount" value="1" min="1" max="20">
@@ -108,6 +132,7 @@
 <script>
     function rollDice() {
         const count = parseInt(document.getElementById('diceCount').value);
+        const sides = parseInt(document.getElementById('diceType').value);
         const diceDisplay = document.getElementById('diceDisplay');
         const totalDisplay = document.getElementById('totalDisplay');
         
@@ -119,24 +144,24 @@
             return;
         }
 
-        let rolls = [];
         let total = 0;
 
         for (let i = 0; i < count; i++) {
-            // Generates a random number between 1 and 6
-            const roll = Math.floor(Math.random() * 6) + 1;
-            rolls.push(roll);
-            total += roll;
-
-            // Create visual die element
             const dieElement = document.createElement('div');
-            dieElement.classList.add('die');
-            dieElement.innerText = roll;
+            dieElement.classList.add('die', 'animate');
+            dieElement.innerText = ""; // blank until animation ends
             diceDisplay.appendChild(dieElement);
-        }
 
-        if (count > 1) {
-            totalDisplay.innerText = `Total: ${total}`;
+            setTimeout(() => {
+                const roll = Math.floor(Math.random() * sides) + 1;
+                dieElement.innerText = roll;
+                total += roll;
+                dieElement.classList.remove('animate');
+
+                if (i === count - 1 && count > 1) {
+                    totalDisplay.innerText = `Total: ${total}`;
+                }
+            }, 500);
         }
     }
 </script>
