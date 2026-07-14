@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Dice Generator</title>
+<style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .roller-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 1.1rem;
+            color: #555;
+            margin-right: 10px;
+        }
+        input {
+            width: 60px;
+            padding: 8px;
+            font-size: 1.1rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .results-box {
+            margin-top: 25px;
+        }
+        .dice-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .die {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .total {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="roller-container">
+    <h1>D6 Dice Roller</h1>
+    
+    <div class="input-group">
+        <label for="diceCount">Dice:</label>
+        <input type="number" id="diceCount" value="1" min="1" max="20">
+    </div>
+
+    <button onclick="rollDice()">Roll Dice</button>
+
+    <div class="results-box">
+        <div class="dice-display" id="diceDisplay"></div>
+        <div class="total" id="totalDisplay"></div>
+    </div>
+</div>
+
+<script>
+    function rollDice() {
+        const count = parseInt(document.getElementById('diceCount').value);
+        const diceDisplay = document.getElementById('diceDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+        
+        diceDisplay.innerHTML = '';
+        totalDisplay.innerHTML = '';
+
+        if (isNaN(count) || count < 1) {
+            alert("Please enter a number greater than 0");
+            return;
+        }
+
+        let rolls = [];
+        let total = 0;
+
+        for (let i = 0; i < count; i++) {
+            // Generates a random number between 1 and 6
+            const roll = Math.floor(Math.random() * 6) + 1;
+            rolls.push(roll);
+            total += roll;
+
+            // Create visual die element
+            const dieElement = document.createElement('div');
+            dieElement.classList.add('die');
+            dieElement.innerText = roll;
+            diceDisplay.appendChild(dieElement);
+        }
+
+        if (count > 1) {
+            totalDisplay.innerText = `Total: ${total}`;
+        }
+    }
+</script>
+
+</body>
+</html>
